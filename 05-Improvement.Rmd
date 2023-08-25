@@ -1,0 +1,93 @@
+# 亞健康改善成效(2,4,6mo)
+
+## Program: Weight Loss  {#imp_ob}
+
+### Obesity
+
+```{r}
+imp_ob_obeisty %>% plot()
+
+```
+
+### Metabolic Syndrome
+
+```{r}
+imp_ob_mets %>% plot()
+
+```
+
+### Pre-Diabetes
+
+```{r}
+imp_ob_dm %>% plot()
+
+```
+
+### Insulin Response Pattern
+
+```{r}
+imp_ob_ir %>% plot()
+
+```
+
+### Hypertension
+
+```{r}
+imp_ob_htn %>% plot()
+
+```
+
+
+### Hyperlipidemia
+
+```{r}
+imp_ob_hlp %>% plot()
+
+```
+
+
+
+## Program: Diabetes Control  {#imp_dm}
+
+### Obesity
+
+```{r}
+imp_dm_obeisty %>% plot()
+
+```
+
+### Metabolic Syndrome
+
+```{r}
+imp_dm_mets %>% plot()
+
+```
+
+### Pre-Diabetes
+
+```{r}
+imp_dm_dm %>% plot()
+
+```
+
+### Insulin Response Pattern
+
+```{r}
+imp_dm_ir %>% plot()
+
+```
+
+### Hypertension
+
+```{r}
+imp_dm_htn %>% plot()
+
+```
+
+
+### Hyperlipidemia
+
+```{r}
+imp_dm_hlp %>% plot()
+
+```
