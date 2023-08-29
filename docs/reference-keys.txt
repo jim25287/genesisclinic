@@ -44,6 +44,7 @@ p1-3fig6
 p1-3tab2
 p1-3fig7
 亞健康改善成效246mo
+imp_def
 imp_ob
 obesity
 metabolic-syndrome
@@ -52,7 +53,7 @@ insulin-response-pattern
 hypertension
 hyperlipidemia
 imp_dm
-dmesity
+obesity-1
 metabolic-syndrome-1
 pre-diabetes-1
 insulin-response-pattern-1

@@ -136,7 +136,17 @@ for (i in c(var_vector)) {
   if (j == 1) {
     vector_pvalue <- c()
     start_time <- Sys.time()
+    
+    #Exclude gp:Poor in male, causing error in t_test Line:160 -  
+    count <- QQ1_stat_table_1st_for_plot %>% filter(gender == "male" & gp == "Poor") %>% nrow()
+    if (count < 3) {
+      QQ1_stat_table_1st_for_plot <- QQ1_stat_table_1st_for_plot %>% filter(!(gender == "male" & gp == "Poor"))
+    }
+    rm(count)
   }
+  
+  
+  
   
   a <- QQ1_stat_table_1st_for_plot %>% colnames() %>% head(i) %>% tail(1)
   a_title <- myplot_table_global_filter[myplot_table_global_filter$num == j, "vars_ch"]
@@ -239,7 +249,7 @@ table_02_exclude_record_factor <-
   kbl(format = "html", caption = "<b>Statistics:</b>", align = "c") %>%
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                             full_width = FALSE, font_size = 15) %>% 
-  add_header_above(c(" " = 1, "Female" = 3, "Male" = 2, " " = 1)) %>% 
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 2, " " = 2)) %>% 
   footnote(general_title = c("Significance:"), general = "\n Comparison: Good vs. Poor in female population.",
            footnote_as_chunk = T, title_format = c("italic", "underline", "bold")
   )%>% 

@@ -77,7 +77,7 @@ options(knitr.graphics.auto_pdf = TRUE, gvis.plot.tag = 'chart')
 
 ```{r alternative try I: input workspace, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
-# load("~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/WSpace_preproc.RData")
+load("~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/WSpace_preproc.RData")
 
 
 #Load packages

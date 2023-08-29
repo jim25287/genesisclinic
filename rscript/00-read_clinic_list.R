@@ -28,6 +28,7 @@ clinical_list <- clinical_list[which(!is.na(clinical_list$serial_id)),]
 
 clinical_list %<>% select(c("serial_id","id","client_type","name","date","class_date_1","class_date_2","medication","doctor","nutritionist_major","nutritionist_online","program","history","note"))
 
+#medication_note: GLP-1 Medication
 clinical_list$medication_note <- NA
 #Trulicity
 clinical_list[grep("(licity){1}",clinical_list$medication),"medication_note"] <- "Trulicity"
@@ -35,6 +36,8 @@ clinical_list[grep("(licity){1}",clinical_list$medication),"medication_note"] <-
 clinical_list[grep("(mpic){1}",clinical_list$medication),"medication_note"] <- "Ozempic"
 #Rybelsus, rebylsus(wrong name) search list
 clinical_list[grep("(sus){1}",clinical_list$medication),"medication_note"] <- "Rybelsus"
+#Saxenda
+clinical_list[grep("(enda){1}",clinical_list$medication),"medication_note"] <- "Saxenda"
 
 clinical_list %<>% relocate(medication_note, .before = medication)
 
@@ -69,6 +72,8 @@ clinical_adv_list[grep("(licity){1}",clinical_adv_list$medication),"medication_n
 clinical_adv_list[grep("(mpic){1}",clinical_adv_list$medication),"medication_note"] <- "Ozempic"
 #Rybelsus, rebylsus(wrong name) search list
 clinical_adv_list[grep("(sus){1}",clinical_adv_list$medication),"medication_note"] <- "Rybelsus"
+#Saxenda
+clinical_list[grep("(enda){1}",clinical_list$medication),"medication_note"] <- "Saxenda"
 
 clinical_adv_list %<>% relocate(medication_note, .before = medication)
 
@@ -109,6 +114,8 @@ clinical_list_lumez[grep("(mpic){1}",clinical_list_lumez$medication),"medication
 clinical_list_lumez[grep("(MPIC){1}",clinical_list_lumez$medication),"medication_note"] <- "Ozempic"
 #Rybelsus, rebylsus(wrong name) search list
 clinical_list_lumez[grep("(sus){1}",clinical_list_lumez$medication),"medication_note"] <- "Rybelsus"
+#Saxenda
+clinical_list[grep("(enda){1}",clinical_list$medication),"medication_note"] <- "Saxenda"
 
 clinical_list_lumez %<>% relocate(medication_note, .before = medication)
 
@@ -142,6 +149,8 @@ clinical_adv_list_lumez[grep("(licity){1}",clinical_adv_list_lumez$medication),"
 clinical_adv_list_lumez[grep("(mpic){1}",clinical_adv_list_lumez$medication),"medication_note"] <- "Ozempic"
 #Rybelsus, rebylsus(wrong name) search list
 clinical_adv_list_lumez[grep("(sus){1}",clinical_adv_list_lumez$medication),"medication_note"] <- "Rybelsus"
+#Saxenda
+clinical_list[grep("(enda){1}",clinical_list$medication),"medication_note"] <- "Saxenda"
 
 clinical_adv_list_lumez %<>% relocate(medication_note, .before = medication)
 

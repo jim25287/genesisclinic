@@ -1608,7 +1608,7 @@ lin_diagnosis_MetaX <- function(df = NULL, variables) {
     cat("Metabolic syndrome 
 Def: 3 in 5.
   (1)wc: Male ≧ 90cm;Female ≧ 80cm
-  (2)Blood Pressure:sbp ≧ 130mmHg or dbp ≧ 80mmHg。
+  (2)Blood Pressure:sbp ≧ 130mmHg or dbp ≧ 85mHg。
   (3)Glucose：glucose_ac ≧ 100mg/dL
   (4)tg：tg ≧ 150mg/dL。
   (5)HDL：Male < 40mg/dL;Female < 50mg/dL",
@@ -1649,7 +1649,7 @@ Def: 3 in 5.
   
   # Rule 2: Blood Pressure
   sbp_threshold <- 130
-  dbp_threshold <- 80
+  dbp_threshold <- 85
   setDT(df)[sbp >= sbp_threshold | dbp >= dbp_threshold, score := score + 1]
   
   # Rule 3: Glucose_ac
