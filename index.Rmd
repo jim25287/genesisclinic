@@ -109,6 +109,7 @@ source("~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/CG_report/rscrip
 source("~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/CG_report/rscript/01.2-global_treatment.R")
 source("~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/CG_report/rscript/01.2.1-global_exclude_record_factor.R")
 
+
 ```
 
 ```{r input plot rscript_test, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
