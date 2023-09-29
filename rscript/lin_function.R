@@ -1553,28 +1553,30 @@ lin_diagnosis_HLP <- function(df = NULL, variables){
   
   setDT(df)[
     (eval(parse(text = variables[1])) == "male") &
-      ((eval(parse(text = variables[2])) >= 150) | (eval(parse(text = variables[3])) >= 200) |
-         (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 40)),
+      ((eval(parse(text = variables[2])) >= 150) | 
+         ((eval(parse(text = variables[3])) >= 200) & 
+            (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 40))),
     HLP := "HLP"]
-  
   
   setDT(df)[
     (eval(parse(text = variables[1])) == "male") &
-      (!(eval(parse(text = variables[2])) >= 150) & !(eval(parse(text = variables[3])) >= 200) &
-         !(eval(parse(text = variables[4])) >= 130) & !(eval(parse(text = variables[5])) <= 40)),
+      !((eval(parse(text = variables[2])) >= 150) | 
+         ((eval(parse(text = variables[3])) >= 200) & 
+            (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 40))),
     HLP := "Normal"]
-  
   
   setDT(df)[
     (eval(parse(text = variables[1])) == "female") &
-      ((eval(parse(text = variables[2])) >= 150) | (eval(parse(text = variables[3])) >= 200) |
-         (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 50)),
+      ((eval(parse(text = variables[2])) >= 150) | 
+         ((eval(parse(text = variables[3])) >= 200) & 
+            (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 50))),
     HLP := "HLP"]
   
   setDT(df)[
     (eval(parse(text = variables[1])) == "female") &
-      (!(eval(parse(text = variables[2])) >= 150) & !(eval(parse(text = variables[3])) >= 200) &
-         !(eval(parse(text = variables[4])) >= 130) & !(eval(parse(text = variables[5])) <= 50)),
+      !((eval(parse(text = variables[2])) >= 150) | 
+          ((eval(parse(text = variables[3])) >= 200) & 
+             (eval(parse(text = variables[4])) >= 130) | (eval(parse(text = variables[5])) <= 50))),
     HLP := "Normal"]
   
   
@@ -1689,6 +1691,82 @@ Def: 3 in 5.
   return(df)
 }
 
+
+
+
+
+lin_diagnosis_MHO_MUHO <- function(df = NULL, variables) {
+  
+  if (is.null(df)) {
+    cat("lin_diagnosis_MHO_MUHO(df, variables)", "\n",
+        "variables = \n",
+        "1. gender\n",
+        "2. bmi\n",
+        "3. tg\n",
+        "4. hdl\n",
+        "5. sbp\n",
+        "6. dbp\n",
+        "7. glucose_ac\n",
+        "try: df %>% names() %>% grep(\"gender|bmi|tg|hdl|sbp|dbp|glucose_ac\", ., value = TRUE)\n\n"
+    )
+  }
+  
+  
+  # Start the clock!
+  ptm <- proc.time()
+  
+  library(data.table)
+  library(magrittr)
+  
+  df[["MHO"]] <- "Others"
+  
+  setDT(df)[
+    (eval(parse(text = variables[2])) < 30) &              
+      (eval(parse(text = variables[3])) <= 150) &            
+      ((eval(parse(text = variables[4])) >= 40 & eval(parse(text = variables[1])) == "male") |
+         (eval(parse(text = variables[4])) >= 50 & eval(parse(text = variables[1])) == "female")) &
+      (eval(parse(text = variables[5])) <= 130) &            
+      (eval(parse(text = variables[6])) <= 85) &             
+      (eval(parse(text = variables[7])) <= 100),
+    MHO := "MH"]
+  
+  setDT(df)[
+    (eval(parse(text = variables[2])) < 30) &              
+      (eval(parse(text = variables[3])) > 150) |            
+      ((eval(parse(text = variables[4])) < 40 & eval(parse(text = variables[1])) == "male") |
+         (eval(parse(text = variables[4])) < 50 & eval(parse(text = variables[1])) == "female")) |
+      (eval(parse(text = variables[5])) > 130) |            
+      (eval(parse(text = variables[6])) > 85) |             
+      (eval(parse(text = variables[7])) > 100),
+    MHO := "MUH"]
+  
+  setDT(df)[
+    (eval(parse(text = variables[2])) >= 30) &              
+      (eval(parse(text = variables[3])) <= 150) &            
+      ((eval(parse(text = variables[4])) >= 40 & eval(parse(text = variables[1])) == "male") |
+         (eval(parse(text = variables[4])) >= 50 & eval(parse(text = variables[1])) == "female")) &
+      (eval(parse(text = variables[5])) <= 130) &            
+      (eval(parse(text = variables[6])) <= 85) &             
+      (eval(parse(text = variables[7])) <= 100),
+    MHO := "MHO"]
+  
+  setDT(df)[
+    (eval(parse(text = variables[2])) >= 30) &              
+      (eval(parse(text = variables[3])) > 150) |            
+      ((eval(parse(text = variables[4])) < 40 & eval(parse(text = variables[1])) == "male") |
+         (eval(parse(text = variables[4])) < 50 & eval(parse(text = variables[1])) == "female")) |
+      (eval(parse(text = variables[5])) > 130) |            
+      (eval(parse(text = variables[6])) > 85) |             
+      (eval(parse(text = variables[7])) > 100),
+    MHO := "MUHO"]
+  
+  df[["MHO"]] <- factor(df[["MHO"]], levels = c("MHO", "MUHO", "MH", "MUH","Others"))
+  
+  result <- table(df[["MHO"]]) %>% addmargins() %>% as.data.frame()
+  
+  print(result)
+  return(df)
+}
 
 
 
@@ -2128,49 +2206,33 @@ time_series_by_id <- function(){
   
 }
 
-# df = df02_inbody
-# vector_id = stat_table_1st_dm$id %>% unique()
-# date = parse(text = date_inbody)
-# variable = parse(text = ecw_ratioeval)
-# path = "~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/tmp_dir/"
-# 
-# n = 1
-# plots = vector('list', length(vector_id))
-# 
-# for (i in vector_id) {
-#   if (n == 1) {
-#     start_time <- Sys.time()
-#   }
-#   
-#   plots[[n]] <- 
-#     df %>% filter(id == i) %>% 
-#     ggplot(aes(x = date, y = variable)) +
-#     geom_line(size = 0.5) + 
-#     geom_point(size = 0.7, shape = 21, fill = "red", stroke = 1) +
-#     geom_hline(yintercept = c(0.36, 0.39), colour = c("black", "red"), linetype = "dashed", lwd = 0.2) +
-#     scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
-#     ylim(0.35, 0.40) +
-#     labs(x = "Date", y = "ECW Ratio", title = paste0("ID:", i, " (", n, "/", length(vector_id),") ", "(Program:DM)")) +
-#     theme_minimal() +
-#     theme(
-#       plot.title = element_text(hjust = 0.5, face = "bold", size = 14)
-#     )
-#   
-#   
-#   jpeg(paste0(path, "ecw_", i,  "_", Sys.Date(), ".jpg"),  
-#        type = "quartz",
-#        res = 300,
-#        width = 2100, height = 900, units = "px")
-#   print(plots[[n]])
-#   dev.off()
-#   
-#   n = n + 1
-#   
-#   progress(n, max = length(vector_id))
-#   if (n == length(vector_id)) {
-#     cat("-----[Completed!!]-----", rep("\n", 3))
-#   }
-#   
-#   # print(plots[[n]])
-#   # Sys.sleep(5)
-# }
+img_print <- function(){
+  
+  #[1]
+  path = "~/Lincoln/02.Work/04. R&D/02. HIIS_OPP/00.Gitbook/01.CG/tmp_dir/"
+  n = length(myplots_MHO)
+  #[2]
+  for (i in 1:n) {
+    if (i == 1) {
+      start_time <- Sys.time()
+    }
+    #[3. file_name]
+    jpeg(paste0(path, "mho_", i,  "_", Sys.Date(), ".jpg"),  
+         type = "quartz",
+         res = 300,
+         width = 1200, height = 900, units = "px")
+    print(myplots_MHO[[i]])
+    dev.off()
+    
+    progress(i, max = n)
+    if (i == n) {
+      cat("-----[Completed!!]-----", rep("\n", 3))
+    }
+    
+    i = i + 1
+    
+    # Sys.sleep(5)
+  }
+  
+}
+

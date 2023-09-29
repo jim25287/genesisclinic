@@ -15,6 +15,7 @@ strat_2_sua
 cor_sua
 cutoff_sua_2
 cutoff_sua_0
+strat_4_MHO
 ketone_response
 chisq分析
 敏感度分析

@@ -502,7 +502,6 @@ df05_biochem[(df05_biochem[["uric_acid"]] < 7.6) & (df05_biochem[["gender"]] == 
 
 
 
-
 # 02.6 - [Data Preprocessing] 07_Diet_meal --------------------------------------------------
 
 df07_Diet_meal <- tmp_07
@@ -993,6 +992,11 @@ stat_table <- stat_table %>% lin_diagnosis_MetaX(c("gender","wc_baseline","sbp_b
 stat_table <- stat_table %>% lin_diagnosis_MetaX(c("gender","wc_endpoint","sbp_endpoint","dbp_endpoint","glucose_ac_endpoint","tg_endpoint","hdl_endpoint")) %>%
   dplyr::rename(MetaX_endpoint = MetaX)
 
+#Diagnosis MHO
+stat_table <- stat_table %>% lin_diagnosis_MHO_MUHO(c("gender","bmi_baseline","tg_baseline","hdl_baseline","sbp_baseline","dbp_baseline","glucose_ac_baseline")) %>% 
+  dplyr::rename(MHO_baseline = MHO)
+stat_table <- stat_table %>% lin_diagnosis_MHO_MUHO(c("gender","bmi_endpoint","tg_endpoint","hdl_endpoint","sbp_endpoint","dbp_endpoint","glucose_ac_endpoint")) %>% 
+  dplyr::rename(MHO_endpoint = MHO)
 
 # lin_mapping(stat_table, client_type, id, df01_profile, client_type, id) %>% View()
 
