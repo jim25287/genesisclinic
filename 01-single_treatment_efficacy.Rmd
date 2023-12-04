@@ -54,6 +54,12 @@ gvisMerge(pie_03, pie_04, horizontal = TRUE,
 
 ```
 
+```{r, results='asis'}
+gvisMerge(pie_03_2, pie_04_2, horizontal = TRUE,
+          tableOptions = "cellspacing=\"5\" bgcolor=\"#AABBCC\"") %>% plot()
+
+```
+
 **Subjects Distribution:** 肥胖相關慢性共病
 
 ```{r, results='asis'}

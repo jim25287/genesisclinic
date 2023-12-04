@@ -30,6 +30,8 @@ pie_02 <-
 
 stat_table_1st_ob$bmi_gp <- cut(stat_table_1st_ob$bmi_baseline, c(0,18.5,24,27,100), c("underweight", "normal", "overweight", "obesity"))
 
+stat_table_1st_ob$bmi_gp_2 <- stat_table_1st_ob$bmi_baseline %>% cut(c(0,18.5,24,27, 30, 35 ,100), c("underweight", "normal", "overweight", "Mild obesity", "Moderate obesity", "Morbid obesity"), right = FALSE)
+
 pie_03 <- 
   stat_table_1st_ob %>% filter(gender == "male") %>% group_by(bmi_gp) %>% summarise(n = n()) %>% gvisPieChart(options = list(title = 'Male',
                                                                                                                              legend = "{position:'right'}",
@@ -48,6 +50,23 @@ pie_04 <-
                                                                                                                                width = "600",
                                                                                                                                height = "400"))
 
+pie_03_2 <- 
+  stat_table_1st_ob %>% filter(gender == "male") %>% group_by(bmi_gp_2) %>% summarise(n = n()) %>% gvisPieChart(options = list(title = 'Male',
+                                                                                                                             legend = "{position:'right'}",
+                                                                                                                             pieHole = 0.5,
+                                                                                                                             #slices = "{2:{offset:0.1}}",
+                                                                                                                             backgroundColor = "#f9fffb",
+                                                                                                                             width = "600",
+                                                                                                                             height = "400"))
+
+pie_04_2 <- 
+  stat_table_1st_ob %>% filter(gender == "female") %>% group_by(bmi_gp_2) %>% summarise(n = n()) %>% gvisPieChart(options = list(title = 'Female',
+                                                                                                                               legend = "{position:'right'}",
+                                                                                                                               pieHole = 0.5,
+                                                                                                                               #slices = "{1:{offset:0.1}}",
+                                                                                                                               backgroundColor = "#f9fffb",
+                                                                                                                               width = "600",
+                                                                                                                               height = "400"))
 # Disease
   #DM
 pie_05_DM <- 

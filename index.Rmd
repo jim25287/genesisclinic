@@ -1,6 +1,6 @@
 ---
-title: "Cofit x Genensis 醫療大數據 (分析報告)"
-author: "By BigData Team"
+title: "Cofit x Genesis 醫療大數據 (分析報告)"
+author: "By Po-Lin Lin, BigData Team"
 date: "Last Updated On `r Sys.Date()`"
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
