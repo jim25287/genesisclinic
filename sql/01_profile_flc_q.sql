@@ -62,4 +62,4 @@ LEFT JOIN orgs
 ON orgs.id = group_classes.org_id
 LEFT JOIN surveys
 ON surveys.client_id = clients.id
-WHERE programs.org_id IN (3, 21, 24, 26)
+WHERE programs.org_id IN (3, 21, 24, 26, 29, 30, 33, 34)
