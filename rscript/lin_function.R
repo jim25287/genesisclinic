@@ -2178,7 +2178,6 @@ time_series_by_id <- function(){
       geom_point(size = 0.7, shape = 21, fill = "red", stroke = 1) +
       geom_hline(yintercept = c(0.36, 0.39), colour = c("black", "red"), linetype = "dashed", lwd = 0.2) +
       scale_x_date(date_labels = "%b-%Y", date_breaks = "1 month") +
-      # scale_x_date(date_labels = paste(paste0("%m","月"),"%Y", sep = "\n"), date_breaks = "1 month") +
       ylim(0.35, 0.40) +
       labs(x = "Date", y = "ECW Ratio", title = paste0("ID:", i, " (", n, "/", length(vector_id),") ", "(Program:DM)")) +
       theme_minimal() +

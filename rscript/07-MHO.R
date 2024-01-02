@@ -59,40 +59,40 @@ var_vector <- c(vars_en_adj %>% grep("baseline$", .),
 
 for (i in c(1:4)) {
   if (i == 1) {
-    myplot_table_global <- data.frame(num = seq(1, length(vars_en_adj)),
+    myplot_table_mho <- data.frame(num = seq(1, length(vars_en_adj)),
                                vars_ch = lin_ch_en_format(x = vars_en_adj, format = "ch", origin = "en"))
-    myplot_table_global <- lin_mapping(myplot_table_global, vars_en_adj, vars_ch, vars_table, en, ch)
-    myplot_table_global <- lin_mapping(myplot_table_global, field, vars_ch, vars_table, field, ch)
+    myplot_table_mho <- lin_mapping(myplot_table_mho, vars_en_adj, vars_ch, vars_table, en, ch)
+    myplot_table_mho <- lin_mapping(myplot_table_mho, field, vars_ch, vars_table, field, ch)
 
-    myplot_table_global <- myplot_table_global[var_vector,]
-    myplot_table_global$num <- seq(1, length(myplot_table_global$num))
+    myplot_table_mho <- myplot_table_mho[var_vector,]
+    myplot_table_mho$num <- seq(1, length(myplot_table_mho$num))
 
-    myplot_table_global$block <- NA
+    myplot_table_mho$block <- NA
     x0 <- c("t0","t1","delta","delta_p")
-    x1 <- (myplot_table_global[["vars_en_adj"]] %>% grep("^[∆]?weight",.))
-    x2 <- (myplot_table_global[["vars_en_adj"]] %>% grep("wepa50",.))
-    x3 <- (myplot_table_global[["vars_en_adj"]] %>% grep("ecw_ratio",.))
-    x4 <- which(myplot_table_global[["vars_en_adj"]] %in% (myplot_table_global[["vars_en_adj"]] %>% grep("left_arm_fat",., value = TRUE) %>% grep("percent",., invert = TRUE, value = TRUE)))
-    x5 <- (myplot_table_global[["vars_en_adj"]] %>% grep("water_weight_left_arm",.))
-    x6 <- (myplot_table_global[["vars_en_adj"]] %>% grep("hba1c",.))
-    x7 <- (myplot_table_global[["vars_en_adj"]] %>% grep("tg",.))
-    x8 <- (myplot_table_global[["vars_en_adj"]] %>% grep("egfr",.))
-    x9 <- (myplot_table_global[["vars_en_adj"]] %>% grep("tsh",.))
-    x10 <- (myplot_table_global[["vars_en_adj"]] %>% grep("wbc",.))
-    x11 <- (myplot_table_global[["vars_en_adj"]] %>% grep("lipase",.))
-    x12 <- (myplot_table_global[["vars_en_adj"]] %>% grep("^age",.))
-    x13 <- (myplot_table_global[["vars_en_adj"]] %>% grep("oil",.))
+    x1 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("^[∆]?weight",.))
+    x2 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("wepa50",.))
+    x3 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("ecw_ratio",.))
+    x4 <- which(myplot_table_mho[["vars_en_adj"]] %in% (myplot_table_mho[["vars_en_adj"]] %>% grep("left_arm_fat",., value = TRUE) %>% grep("percent",., invert = TRUE, value = TRUE)))
+    x5 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("water_weight_left_arm",.))
+    x6 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("hba1c",.))
+    x7 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("tg",.))
+    x8 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("egfr",.))
+    x9 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("tsh",.))
+    x10 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("wbc",.))
+    x11 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("lipase",.))
+    x12 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("^age",.))
+    x13 <- (myplot_table_mho[["vars_en_adj"]] %>% grep("oil",.))
   }
   for (j in c(1:10)) {
     if (j != 10) {
-      myplot_table_global$block[(eval(parse(text = paste0("x", j))))[i]:((eval(parse(text = paste0("x", j+1))))[i]-1)] <- paste(x0[i], j, sep = "_")
+      myplot_table_mho$block[(eval(parse(text = paste0("x", j))))[i]:((eval(parse(text = paste0("x", j+1))))[i]-1)] <- paste(x0[i], j, sep = "_")
       }else{
-        myplot_table_global$block[x10[i]:x11[i]] <- paste(x0[i], j, sep = "_")
+        myplot_table_mho$block[x10[i]:x11[i]] <- paste(x0[i], j, sep = "_")
       }
   }
   
   if ((i == 4) & (j == 10)) {
-    myplot_table_global$block[x12:x13] <- "diet"
+    myplot_table_mho$block[x12:x13] <- "diet"
     rm(list = paste0("x", seq(0,13)))
   }
 }
@@ -108,9 +108,16 @@ for (i in c(var_vector)) {
     start_time <- Sys.time()
   }
   
+  #error skip
+  skip_condition <- rownames(myplot_table_mho)[stringr::str_which(myplot_table_mho$vars_en_adj, "psa_")] %>% as.numeric()
+  if (i == skip_condition) {
+    vector_pvalue <- append(vector_pvalue, "ns"
+    )  
+    next  
+  }
   
   a <- QQ1_stat_table_1st_for_plot %>% colnames() %>% head(i) %>% tail(1)
-  a_title <- myplot_table_global[myplot_table_global$num == j, "vars_ch"]
+  a_title <- myplot_table_mho[myplot_table_mho$num == j, "vars_ch"]
   
   
   #ALL: female >= 3
@@ -203,7 +210,7 @@ summary_table_MHO <-
 summary_table_MHO <- cbind(summary_table_MHO %>% as.data.frame() %>% select(-c("gender", "gp")) %>% t(), as.data.frame(vector_pvalue)) 
 
 names(summary_table_MHO) <- c(rep(c("MHO", "MUHO", "MH", "MUH"), 2), "顯著差異")
-rownames(summary_table_MHO) <- myplot_table_global$vars_ch
+rownames(summary_table_MHO) <- myplot_table_mho$vars_ch
 
 table_MHO_02 <- 
   summary_table_MHO %>% 
