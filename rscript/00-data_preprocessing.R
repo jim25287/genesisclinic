@@ -176,7 +176,7 @@ df01_profile[intersect(which(df01_profile$org_name == "lumez"), grep("進階", d
 
 
 #clean by select
-df01_profile <- df01_profile %>% select(c("id", "name", "gender", "age", "client_type", "program_name","date_t0","date_t1", "org_name", "class_freq", "class_order","program_set","doctor","nutritionist_major","nutritionist_online","medication", "btd"))
+df01_profile <- df01_profile %>% select(c("id", "name", "gender", "age", "client_type", "program_name","date_t0","date_t1", "org_name", "class_freq", "class_order","program_set","doctor","nutritionist_major","nutritionist_online","medication", "btd", "identity_number"))
 
 
 
@@ -223,6 +223,13 @@ df03_FLC_self_report <- df03_FLC_self_report[with(df03_FLC_self_report, order(da
 
 #C2. age: btd - date_t0 年齡(療程起始當天計算)
 df03_FLC_self_report$age <- (lubridate::ymd(df03_FLC_self_report$date_flc_T0) - lubridate::ymd(df03_FLC_self_report$btd)) %>% as.numeric() %>% divide_by(365) %>% floor()
+
+#[240315] Debug start from here
+
+
+# End.
+
+
 #C2-2. carb/protein/fat E%:
 df03_FLC_self_report <- df03_FLC_self_report %>% mutate(carb_ep = (carbohydrate*4 / (carbohydrate*4 + protein*4 + fat*9) ))
 df03_FLC_self_report <- df03_FLC_self_report %>% mutate(protein_ep = (protein*4 / (carbohydrate*4 + protein*4 + fat*9) ))

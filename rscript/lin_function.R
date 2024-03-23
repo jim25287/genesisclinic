@@ -1836,7 +1836,7 @@ lin_help_ggplot<- function(){
   geom_line(aes(diet_compliance/10, predicted + 2*sd), color = "grey30", lwd = 0.1, alpha = 0.2) + 
   
   #C. Barplot
-  geom_bar(stat = "identity", position = position_dodge(0.8)) +
+  geom_bar(stat = "identity", color = "black", position = position_dodge(0.8)) +
   geom_errorbar(aes(ymin = weight_mean - weight_se, ymax = weight_mean + weight_se), width = 0.2, position = position_dodge(0.8)) +
   scale_fill_manual(values = RColorBrewer::brewer.pal(6, "RdBu")) +
 
@@ -1957,6 +1957,47 @@ lin_help_ggplot<- function(){
       bracket.nudge.y = 1, step.increase = 0.01, hide.ns = FALSE 
     ) +
     coord_flip()'
+  
+  
+  # show syntax:
+  cat(syntax)
+  # run syntax:
+  # eval(parse(text = syntax))
+}
+
+
+
+lin_help_analysis_vis<- function(){
+  syntax <- 
+    '
+    ## [Before vs. AFTER w/P-Value]
+    # [01. MELT]
+    df <- b %>% reshape2::melt(id.var = c("id", "gender"),
+                               measure.vars = c("bsmi_baseline", "bsmi_endpoint"),
+                               variable.name = "group",
+                               value.name = "bsmi")
+    df$gender <- df$gender %>% factor(levels = c("female", "male"))
+    
+    # [02. P-Value]
+    stat.test <- df %>% group_by(gender) %>% rstatix::t_test(bsmi ~ group, paired = T) %>% rstatix::add_significance()
+    stat.test <- stat.test %>% rstatix::add_xy_position(x = "gender", fun = "mean_sd")
+
+    # [03. Vis. @Ref/lin_help_ggplot]
+    df %>% 
+      ggbarplot(x = "gender", y = "bsmi", add = "mean_sd",
+                fill = "group", color = "black", 
+                position = position_dodge(0.8)) +
+      scale_fill_manual(labels=c("BEFORE","AFTER"), values = RColorBrewer::brewer.pal(9, "Paired")[c(1,7)]) +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+      labs(x = "", y = "BSMI(±SD)", title = "Bar Plot with Mean and SD by Gender and Group", fill = "") +
+      scale_x_discrete(labels=c("FEMALE","MALE")) +
+      theme(
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 15)
+      ) +
+      stat_pvalue_manual(stat.test, label = "p.signif")
+        
+    
+    '
   
   
   # show syntax:
@@ -2128,6 +2169,41 @@ surv$plot +
   # eval(parse(text = syntax))
 }
 
+
+
+lin_help_xlsx<- function(){
+  syntax <-
+  '
+  # [Single sheet]
+  writexl::write_xlsx(b, "tmp2.xlsx")
+  
+  # [Divide into sheets]
+  
+  library(openxlsx)
+  wb <- createWorkbook()
+   
+  addWorksheet(wb, "ob01")
+  writeData(wb, "ob01", ob01, rowNames = TRUE)
+   
+  addWorksheet(wb, "ob02")
+  writeData(wb, "ob02", ob02, rowNames = TRUE)
+   
+  addWorksheet(wb, "dm01")
+  writeData(wb, "dm01", dm01, rowNames = TRUE)
+   
+  addWorksheet(wb, "dm02")
+  writeData(wb, "dm02", dm02, rowNames = TRUE)
+   
+  saveWorkbook(wb, "0115_data.xlsx", overwrite = TRUE) 
+  
+  '
+  
+  
+  # show syntax:
+  cat(syntax)
+  # run syntax:
+  # eval(parse(text = syntax))
+}
 
 
 

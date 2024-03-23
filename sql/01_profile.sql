@@ -85,7 +85,7 @@ WITH surveys AS (
 )
 
 SELECT
-  org_client_profiles.branch_id, clients.id, clients.name, clients.gender, clients.birthday AS btd, group_classes.id AS class_id, users.real_name AS neutrionist_real_name, CONCAT(users.first_name, users.last_name) AS user_name, clients.mobile, programs.name AS program_name, orgs.name AS org_name, group_classes.started_at AS date_T0, group_classes.finished_at AS date_T1,
+  org_client_profiles.branch_id, clients.id, clients.name, org_client_profiles.identity_number, clients.gender, clients.birthday AS btd, group_classes.id AS class_id, users.real_name AS neutrionist_real_name, CONCAT(users.first_name, users.last_name) AS user_name, clients.mobile, programs.name AS program_name, orgs.name AS org_name, group_classes.started_at AS date_T0, group_classes.finished_at AS date_T1,
   surveys.*
 FROM clients
 INNER JOIN group_class_orders

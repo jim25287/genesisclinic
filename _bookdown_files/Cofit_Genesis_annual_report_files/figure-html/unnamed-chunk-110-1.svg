@@ -585,9 +585,9 @@
 <g clip-path='url(#cpMzcwLjMxfDUxMi40MnwzMTMuMzl8NTA3Ljk3)'>
 <rect x='370.31' y='313.39' width='142.12' height='194.58' style='stroke-width: 1.16; stroke: none; fill: #FFFFFF;' />
 <circle cx='409.06' cy='327.14' r='1.95' style='stroke-width: 0.71; stroke: #000000; stroke-opacity: 0.50; fill: #000000; fill-opacity: 0.50;' />
-<line x1='409.06' y1='406.32' x2='409.06' y2='370.14' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<line x1='409.06' y1='404.22' x2='409.06' y2='370.14' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='409.06' y1='451.94' x2='409.06' y2='499.13' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<polygon points='392.91,406.32 392.91,451.94 425.21,451.94 425.21,406.32 392.91,406.32 ' style='stroke-width: 1.07; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8766D; fill-opacity: 0.50;' />
+<polygon points='392.91,404.22 392.91,451.94 425.21,451.94 425.21,404.22 392.91,404.22 ' style='stroke-width: 1.07; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8766D; fill-opacity: 0.50;' />
 <line x1='392.91' y1='430.96' x2='425.21' y2='430.96' style='stroke-width: 2.13; stroke-linecap: butt; stroke-linejoin: miter;' />
 <line x1='473.66' y1='393.21' x2='473.66' y2='368.04' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <line x1='473.66' y1='439.35' x2='473.66' y2='490.74' style='stroke-width: 1.07; stroke-linecap: butt;' />

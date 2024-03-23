@@ -1,7 +1,8 @@
 
 
 # 01. Pie chart -----------------------------------------------------------
-
+# [Issue: 有部分人只有飲食記錄，沒有體重紀錄]
+df03_FLC_self_report <- df03_FLC_self_report_w8df %>% filter(!is.na(`weight(T0)`))
 
 #Age
 df03_FLC_self_report$age_gp <- cut(df03_FLC_self_report$age, c(0,25,29.5,34.5,39.5,44.5,49.5,54.5,59.5,64.5,69.5,100), c("<25", "25-29", "30-34", "35-39","40-44","45-49","50-54","55-59","60-64","65-69",">70"))
@@ -132,7 +133,11 @@ cor_table_flc_01 <- M1_flc_df %>% gvisTable(options=list(frozenColumns = 2,
 df03_FLC_self_report$`∆weight%` %>% summary()
 
 # Method 1: 按照data散佈百分比. e.g., Q1~Q4
-df03_FLC_self_report$gp <- df03_FLC_self_report$`∆weight%` %>% cut(breaks = 3, labels = c("Good","Medium","Poor"))
+# df03_FLC_self_report$gp <- df03_FLC_self_report$`∆weight%` %>% cut(breaks = 3, labels = c("Good","Medium","Poor"))
+df03_FLC_self_report$gp <- df03_FLC_self_report$`∆weight%` %>% cut(breaks = c(-Inf, -8, -4, Inf), labels = c("Good","Medium","Poor"))
+df03_FLC_self_report$gp <- factor(df03_FLC_self_report$gp, levels = (c("Good","Medium","Poor") %>% rev()) )
+
+
 df03_FLC_self_report$`∆weight%` %>% cut(breaks = 3, labels = c())
 # Method 2: makes n groups with (approximately) equal numbers of observations;
 # df03_FLC_self_report$gp <- df03_FLC_self_report$`∆weight%` %>% cut_number(3, labels = c("Good","Medium","Poor"))
@@ -231,7 +236,8 @@ for (i in c(var_vector)) {
   #plot
   plot <- 
     datasets_target_issue_for_plot %>% 
-    ggbarplot(x = "gender", y = a, fill = "gp", palette = c("#dce5f6","#fdf7d6","#ffe6cd","#ffdac9","#ffd8d8"), alpha = 1.0,
+    # ggbarplot(x = "gender", y = a, fill = "gp", palette = c("#dce5f6","#fdf7d6","#ffe6cd") %>% rev(), alpha = 1.0,
+    ggbarplot(x = "gender", y = a, fill = "gp", alpha = 0.5,
               add = "mean_se", add.params = list(group = "gp"),
               position = position_dodge(0.8), legend = "right", legend.title = "") +
     scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
@@ -262,7 +268,7 @@ table_01_flc <-
   kable(format = "html", caption = "<b>Table: Population</b>", align = "c") %>%
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
                             full_width = FALSE, font_size = 15) %>% 
-  footnote(general_title = c("Note:"), general = c(rbind("", c(" FLC Program"))),
+  footnote(general_title = c("Note:"), general = c(rbind("\n", c("- Poor: Less than 4%", "- Medium: Between 4~8%", "- Good: More than 8%", "- Program: 經典8週-FLC, 進階計畫, 宋醫師專班-FLC, 宋醫師進階計畫"))),
            footnote_as_chunk = T, title_format = c("italic", "underline", "bold")
   )%>% 
   gsub("font-size: initial !important;", 
@@ -308,9 +314,8 @@ table_02_flc <-
 
 
 
-
 # 04.  Importance of diet record & "Cofit Weight Loss Strategy" -----------
-
+df03_FLC_self_report <- df03_FLC_self_report %>% mutate(diet_compliance = (`light_G_%` * `upload_day_%`)/100 )
 
 df03_FLC_self_report <- df03_FLC_self_report %>% filter((diet_compliance >= 0) & (diet_compliance <= 100))
 # df03_FLC_self_report$gp_diet_compliance <- df03_FLC_self_report$diet_compliance %>% cut(breaks = 3, c("Low", "Medium", "High"))
