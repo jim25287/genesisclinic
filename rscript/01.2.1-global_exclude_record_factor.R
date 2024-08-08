@@ -73,6 +73,7 @@ QQ1_stat_table_1st <- QQ1_stat_table_1st %>% select_if(~ sum(!is.na(.)) >= 50)
 #change colname to run plot
 QQ1_stat_table_1st_for_plot <- QQ1_stat_table_1st
 
+
 names(QQ1_stat_table_1st_for_plot) <- gsub("∆", "delta_", names(QQ1_stat_table_1st_for_plot))
 names(QQ1_stat_table_1st_for_plot) <- gsub("%", "_p", names(QQ1_stat_table_1st_for_plot))
 
@@ -137,34 +138,38 @@ for (i in c(var_vector)) {
     vector_pvalue <- c()
     start_time <- Sys.time()
     
+  }
+  
+  
+  a <- QQ1_stat_table_1st_for_plot %>% colnames() %>% head(i) %>% tail(1)
+  a_title <- myplot_table_global_filter[myplot_table_global_filter$num == j, "vars_ch"]
+  
+  # [240409_debug]
     #Exclude gp:Poor in male, causing error in t_test Line:160 -  
-    count <- QQ1_stat_table_1st_for_plot %>% filter(gender == "male" & gp == "Poor") %>% nrow()
-    if (count < 3) {
-      QQ1_stat_table_1st_for_plot <- QQ1_stat_table_1st_for_plot %>% filter(!(gender == "male" & gp == "Poor"))
-    }
-    rm(count)
+  if ((QQ1_stat_table_1st_for_plot %>% filter(gender == "male" & gp == "Poor" & !is.na(eval(parse(text = a))))) %>% nrow() < 3) {
+    QQ1_stat_table_1st_for_plot_run <-  QQ1_stat_table_1st_for_plot %>% filter(!(gender == "male" & gp == "Poor"))
+  }else{
+    QQ1_stat_table_1st_for_plot_run <- QQ1_stat_table_1st_for_plot
   }
   
   
   
   
-  a <- QQ1_stat_table_1st_for_plot %>% colnames() %>% head(i) %>% tail(1)
-  a_title <- myplot_table_global_filter[myplot_table_global_filter$num == j, "vars_ch"]
   #observation not less than 3: count >= 3
   
   # any(combn(vec, 2, function(x) all(x))
   #any 2: male >= 3
-  a1 <- ((table(Count = is.na(QQ1_stat_table_1st_for_plot[[a]]), QQ1_stat_table_1st_for_plot[["gender"]], QQ1_stat_table_1st_for_plot[["gp"]]) %>% ftable())[2,] >= 3)
+  a1 <- ((table(Count = is.na(QQ1_stat_table_1st_for_plot_run[[a]]), QQ1_stat_table_1st_for_plot_run[["gender"]], QQ1_stat_table_1st_for_plot_run[["gp"]]) %>% ftable())[2,] >= 3)
   a1 <- any(combn(a1, 2, function(x) all(x)))
   #ALL: female >= 3
-  a2 <- ((table(Count = is.na(QQ1_stat_table_1st_for_plot[[a]]), QQ1_stat_table_1st_for_plot[["gender"]], QQ1_stat_table_1st_for_plot[["gp"]]) %>% ftable())[1,] >= 3)
+  a2 <- ((table(Count = is.na(QQ1_stat_table_1st_for_plot_run[[a]]), QQ1_stat_table_1st_for_plot_run[["gender"]], QQ1_stat_table_1st_for_plot_run[["gp"]]) %>% ftable())[1,] >= 3)
   a2 <- any(combn(a2, 2, function(x) all(x)))
   if_run <- (a1 & a2) 
   
   if (if_run) {
     #p.sign?
     stat.test <- 
-      QQ1_stat_table_1st_for_plot %>%
+      QQ1_stat_table_1st_for_plot_run %>%
       group_by(gender) %>%
       rstatix::t_test(as.formula(paste(a, "gp", sep = " ~ "))) 
     stat.test <- stat.test %>% rstatix::add_xy_position(x = "gender", fun = "mean_se", dodge = 0.8)
@@ -176,7 +181,7 @@ for (i in c(var_vector)) {
   }else{
     #p.sign?
     stat.test <- 
-      QQ1_stat_table_1st_for_plot %>%
+      QQ1_stat_table_1st_for_plot_run %>%
       rstatix::t_test(as.formula(paste(a, "gp", sep = " ~ "))) 
     stat.test <- stat.test %>% rstatix::add_xy_position(x = "gender", fun = "mean_se", dodge = 0.8)
     
@@ -188,7 +193,7 @@ for (i in c(var_vector)) {
   
   #plot
   plot <- 
-    QQ1_stat_table_1st_for_plot %>% 
+    QQ1_stat_table_1st_for_plot_run %>% 
     ggbarplot(x = "gender", y = a, fill = "gp", alpha = 0.5,
               add = "mean_se", add.params = list(group = "gp"),
               position = position_dodge(0.8), legend = "right", legend.title = "") +

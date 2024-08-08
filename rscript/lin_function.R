@@ -823,6 +823,7 @@ lin_insulin_rsp_pattern <- function(df, variables, pattern = 1, plot = NULL, tab
                                                "Unclassified")))
   }else if (pattern == 2) {
     
+    a <- gsub("\\s", "", df$I)
     b <- gsub("\\s", "", df$I)
     b <- gsub("[(][A-Za-z0-9.,-]{0,}[)]", "", b)
     b <- gsub("Pattern", "", b)
